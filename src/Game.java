@@ -12,6 +12,9 @@ import javafx.util.Duration;
 
 import java.util.Map;
 
+/**
+ * Game class to play out game.It handles all components of the game.
+ */
 public class Game {
     private Text textForFuel;
     private Text textForHaul;
@@ -25,6 +28,20 @@ public class Game {
     private Map<String,Integer> valuablesMoney;
     private Map<String,Integer> valuablesWeight;
 
+    /**
+     * Constructor for creating an object of Game class.
+     * @param textForFuel       Text that shows the amount of fuel drill has left.
+     * @param textForHaul       Text that shows the current haul of the drill.
+     * @param textForMoney      Text that shows the total money collected.
+     * @param drill             The drill object.Our machine.
+     * @param scene             Our game scene.It has all the images for our game.
+     * @param stage             Stage of the game.
+     * @param root              Root group of the scene.
+     * @param grid              Grid of imageView objects representing the game components.
+     * @param gridString        Grid of strings representing the type of each grid cell.
+     * @param valuablesMoney    Map that contains the money of valuables.
+     * @param valuablesWeight   Map that contains the weight of valuables.
+     */
     public Game(Text textForFuel, Text textForHaul, Text textForMoney, Drill drill, Scene scene, Stage stage, Group root, ImageView[][] grid, String[][] gridString,
                 Map<String, Integer> valuablesMoney, Map<String, Integer> valuablesWeight) {
         this.textForFuel = textForFuel;
@@ -50,6 +67,10 @@ public class Game {
     Timeline timelineForGravity;
     Timeline timelineForFuel;
     AnimationTimer animationTimer;
+
+    /**
+     * game method to play the game.
+     */
     public void game(){
         int SQUARE_LENGTH = 30;
 
@@ -77,6 +98,11 @@ public class Game {
         });
     }
 
+    /**
+     * Method fpr decreasing the fuel for every move.
+     * @param decreaseAmount The change in the fuel for that move.If drill tries to drill upward decreaseAmount will
+     *                       be bigger than normal conditions.
+     */
     private void decreaseFuel(int decreaseAmount){
         drill.setFuel(drill.getFuel()-decreaseAmount);
         textForFuel.setText("fuel:" + drill.getFuel());
@@ -85,6 +111,12 @@ public class Game {
         }
     }
 
+    /**
+     * up method to control the move for upward direction.
+     * @param SQUARE_LENGTH Height of each grid.
+     * @param scene         Our game scene.It has all the images for our game.
+     * @param root          Root group of the scene.
+     */
     private void up(int SQUARE_LENGTH,Scene scene,Group root) {
 
         if(checkUp(drill.getXPosition(),drill.getYPosition(),SQUARE_LENGTH)){
@@ -92,6 +124,7 @@ public class Game {
             if(drill.getCondition() != drillUp){
                 drill.setCondition(drillUp);
             }
+            // set the imageView components for drill
             ImageView drillImage = new ImageView(drill.getCondition());
             drill.setYPosition(drill.getYPosition() - SQUARE_LENGTH);
 
@@ -111,6 +144,13 @@ public class Game {
             });
         }
     }
+
+    /**
+     * down method to control the move for downward direction.
+     * @param SQUARE_LENGTH Height of each grid.
+     * @param scene         Our game scene.It has all the images for our game.
+     * @param root          Root group of the scene.
+     */
     private void down(int SQUARE_LENGTH,Scene scene,Group root) {
 
         if(checkDown(drill.getXPosition(),drill.getYPosition(),SQUARE_LENGTH)){
@@ -124,6 +164,51 @@ public class Game {
         }
     }
 
+    /**
+     * right method to control the move for rightward direction.
+     * @param SQUARE_LENGTH Height of each grid.
+     * @param scene         Our game scene.It has all the images for our game.
+     * @param root          Root group of the scene.
+     */
+    private void right(int SQUARE_LENGTH,Scene scene,Group root) {
+
+        if(checkRight(drill.getXPosition(),drill.getYPosition(),SQUARE_LENGTH)){
+            // change the direction of drill
+            if(drill.getCondition() != drillRight){
+                drill.setCondition(drillRight);
+            }
+            ImageView drillImage = new ImageView(drill.getCondition());
+            drill.setXPosition(drill.getXPosition() + SQUARE_LENGTH);
+            move(SQUARE_LENGTH, scene, root, drillImage);
+        }
+    }
+
+    /**
+     * left method to control the move for leftward direction.
+     * @param SQUARE_LENGTH Height of each grid.
+     * @param scene         Our game scene.It has all the images for our game.
+     * @param root          Root group of the scene.
+     */
+    private void left(int SQUARE_LENGTH,Scene scene,Group root) {
+
+        if(checkLeft(drill.getXPosition(), drill.getYPosition(), SQUARE_LENGTH)){
+            // change the direction of drill
+            if(drill.getCondition() != drillLeft){
+                drill.setCondition(drillLeft);
+            }
+            ImageView drillImage = new ImageView(drill.getCondition());
+            drill.setXPosition(drill.getXPosition() - SQUARE_LENGTH);
+            move(SQUARE_LENGTH, scene, root, drillImage);
+        }
+    }
+
+    /**
+     * move method that changes certain things for left,right,down
+     * @param SQUARE_LENGTH Height of each grid.
+     * @param scene         Our game scene.It has all the images for our game.
+     * @param root          Root group of the scene.
+     * @param drillImage    The Image of drill's current condition.
+     */
     private void move(int SQUARE_LENGTH, Scene scene, Group root, ImageView drillImage) {
         drillImage.setFitWidth(SQUARE_LENGTH);
         drillImage.setFitHeight(SQUARE_LENGTH);
@@ -140,36 +225,20 @@ public class Game {
         gravity(drill.getXPosition(),drill.getYPosition(),SQUARE_LENGTH);
     }
 
-    private void right(int SQUARE_LENGTH,Scene scene,Group root) {
-
-        if(checkRight(drill.getXPosition(),drill.getYPosition(),SQUARE_LENGTH)){
-            // change the direction of drill
-            if(drill.getCondition() != drillRight){
-                drill.setCondition(drillRight);
-            }
-            ImageView drillImage = new ImageView(drill.getCondition());
-            drill.setXPosition(drill.getXPosition() + SQUARE_LENGTH);
-            move(SQUARE_LENGTH, scene, root, drillImage);
-        }
-    }
-    private void left(int SQUARE_LENGTH,Scene scene,Group root) {
-
-        if(checkLeft(drill.getXPosition(), drill.getYPosition(), SQUARE_LENGTH,root)){
-            // change the direction of drill
-            if(drill.getCondition() != drillLeft){
-                drill.setCondition(drillLeft);
-            }
-            ImageView drillImage = new ImageView(drill.getCondition());
-            drill.setXPosition(drill.getXPosition() - SQUARE_LENGTH);
-            move(SQUARE_LENGTH, scene, root, drillImage);
-        }
-    }
-
-    private boolean checkLeft(int xPosition , int yPosition, int SQUARE_LENGTH,Group root){
+    /**
+     * checkLeft method for checking the left move is valid or not.
+     * @param xPosition     X position of our drill.
+     * @param yPosition     Y position of our drill.
+     * @param SQUARE_LENGTH Height of each grid.
+     * @return              true if move is valid , false if it is not.
+     */
+    private boolean checkLeft(int xPosition , int yPosition, int SQUARE_LENGTH){
+        // if drill is at the most left of our scene
         if(drill.getXPosition() == 0){
             return false;
         }
         String value = gridString[(xPosition - SQUARE_LENGTH)/SQUARE_LENGTH][(yPosition/SQUARE_LENGTH)];
+        // checks for every possible element
         switch (value) {
             case "empty":
                 root.getChildren().remove(root.getChildren().size() - 1);
@@ -194,11 +263,21 @@ public class Game {
         root.getChildren().remove(root.getChildren().size()-1);
         return true;
     }
+
+    /**
+     * checkRight method for checking the right move is valid or not.
+     * @param xPosition     X position of our drill.
+     * @param yPosition     Y position of our drill.
+     * @param SQUARE_LENGTH Height of each grid.
+     * @return              true if move is valid , false if it is not.
+     */
     private boolean checkRight(int xPosition, int yPosition , int SQUARE_LENGTH){
+        // if drill is at the most right of our scene
         if(drill.getXPosition() == (scene.getWidth() - SQUARE_LENGTH)){
             return false;
         }
         String value = gridString[(xPosition + SQUARE_LENGTH)/SQUARE_LENGTH][(yPosition/SQUARE_LENGTH)];
+        // checks for every possible element
         switch (value) {
             case "empty":
                 root.getChildren().remove(root.getChildren().size() - 1);
@@ -223,12 +302,22 @@ public class Game {
         root.getChildren().remove(root.getChildren().size()-1);
         return true;
     }
+
+    /**
+     * checkUp method for checking the up move is valid or not and also add animation if drill try to drill upward.
+     * @param xPosition     X position of our drill.
+     * @param yPosition     Y position of our drill.
+     * @param SQUARE_LENGTH Height of each grid.
+     * @return              true if move is valid , false if it is not.
+     */
     private boolean checkUp(int xPosition, int yPosition , int SQUARE_LENGTH){
+        // if drill is at the top of our scene
         if(drill.getYPosition() == 10){
             decreaseFuel(120);
             return false;
         }
         String value = gridString[xPosition/SQUARE_LENGTH][(yPosition - SQUARE_LENGTH)/SQUARE_LENGTH];
+        // drill can not drill upward so if the up block is only "sky" or "empty" drill can fly
         if(value.equals("empty") || value.equals("sky")){
             decreaseFuel(100);
             root.getChildren().remove(root.getChildren().size()-1);
@@ -275,12 +364,20 @@ public class Game {
         root.getChildren().add(drillImage);
         return false;
     }
-
+    /**
+     * checkDown method for checking the down move is valid or not.
+     * @param xPosition     X position of our drill.
+     * @param yPosition     Y position of our drill.
+     * @param SQUARE_LENGTH Height of each grid.
+     * @return              true if move is valid , false if it is not.
+     */
     private boolean checkDown(int xPosition, int yPosition , int SQUARE_LENGTH){
+        // if drill is at the bottom of our scene
         if(drill.getYPosition() == scene.getHeight() - SQUARE_LENGTH){
             return false;
         }
         String value = gridString[xPosition/SQUARE_LENGTH][(yPosition + SQUARE_LENGTH)/SQUARE_LENGTH];
+        // checks for every possible element
         switch (value) {
             case "empty":
                 root.getChildren().remove(root.getChildren().size() - 1);
@@ -306,10 +403,14 @@ public class Game {
         return true;
     }
 
-    private void checkForValuables(String value) {
+    /**
+     * If drill encounters valuable this method is called to modify the drill's money and haul.
+     * @param valuable Valuable that the drill encounters.
+     */
+    private void checkForValuables(String valuable) {
         root.getChildren().remove(root.getChildren().size()-1);
         for(String s : valuablesMoney.keySet()){
-            if(s.equals(value)){
+            if(s.equals(valuable)){
                 drill.setMoney(drill.getMoney() + valuablesMoney.get(s));
                 drill.setHaul(drill.getHaul() + valuablesWeight.get(s));
                 textForMoney.setText("money:" + drill.getMoney());
@@ -318,6 +419,13 @@ public class Game {
             }
         }
     }
+
+    /**
+     * decreaseFuel method to decrease the fuel every 0.1 second.
+     * @param drill         Our drill.
+     * @param textForFuel   Text that shows the amount of fuel drill has left.
+     * @param DECREASE_RATE Decrease amount that will be executed on drill's fuel every 0.1 second.
+     */
     private void decreaseFuel(Drill drill,Text textForFuel,double DECREASE_RATE) {
         drill.setFuel(drill.getFuel()-DECREASE_RATE);
         textForFuel.setText("fuel:" + String.format("%.3f",drill.getFuel()));
@@ -327,6 +435,12 @@ public class Game {
         }
     }
 
+    /**
+     * gravity method checks if there is no block below our drill it will fall down.
+     * @param xPosition     X position of our drill.
+     * @param yPosition     Y position of our drill.
+     * @param SQUARE_LENGTH Height of each grid.
+     */
     private void gravity(int xPosition, int yPosition , int SQUARE_LENGTH) {
         int EMPTY_COUNT = 0;
         for(int y = (yPosition/SQUARE_LENGTH) + 1;y<scene.getHeight()/SQUARE_LENGTH;y++){
@@ -352,6 +466,11 @@ public class Game {
             timelineForGravity.play();
         }
     }
+
+    /**
+     * gameForFuel method is called whenever our drill is out of fuel.This method creates another scene
+     * and this scene to our stage.This also displays the collected money.
+     */
     private void gameOverForFuel(){
         Group root = new Group();
         Text gameOverText = new Text("Game Over");
@@ -375,6 +494,11 @@ public class Game {
         stage.show();
     }
 
+    /**
+     * gameForLava method is called whenever drill encounters a lava and this method ends the game,
+     * create a new scene and adds it to our stage. This does not display the drill's money because
+     * after touching the lava, machine is destroyed.
+     */
     private void gameOverForLava(){
         Group root = new Group();
         Text gameOverText = new Text("Game Over");

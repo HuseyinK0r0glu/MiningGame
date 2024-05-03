@@ -2,6 +2,9 @@ import javafx.scene.image.Image;
 
 import java.io.InputStream;
 
+/**
+ * Drill class for holding attributes of our drill.
+ */
 public class Drill {
     private double fuel;
     private int haul;
@@ -9,6 +12,15 @@ public class Drill {
     private int XPosition;
     private int YPosition;
     private Image condition;
+
+    /**
+     * Constructor for creating a drill object with some initial values.
+     * @param fuel      The fuel of the machine.It decreases with every move and in every second.
+     * @param haul      Total weight of the valuable materials that the drill collected.
+     * @param money     Money amount for valuable materials that the drill collected while drilling.
+     * @param XPosition Y position of the drill.
+     * @param YPosition X position of the drill.
+     */
     public Drill(double fuel, int haul, int money, int XPosition, int YPosition) {
         this.fuel = fuel;
         this.haul = haul;
