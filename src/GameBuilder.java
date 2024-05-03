@@ -23,8 +23,8 @@ public class GameBuilder {
     }
     public Scene buildTheGame(){
 
-        final int SCENE_WIDTH = 750;
-        final int SCENE_HEIGHT = 750;
+        final int SCENE_WIDTH = 720;
+        final int SCENE_HEIGHT = 720;
 
         int SQUARE_WIDTH = 30;
         int SQUARE_HEIGHT = 30;
@@ -68,8 +68,8 @@ public class GameBuilder {
         int BOULDER_NUMBER = 10;
         int BOULDER_COUNT = 0;
         while(BOULDER_COUNT < BOULDER_NUMBER){
-            int randomX = random.nextInt(23) + 1;
-            int randomY = random.nextInt(19) + 3;
+            int randomX = random.nextInt(22) + 1;
+            int randomY = random.nextInt(18) + 3;
             place(SQUARE_WIDTH,SQUARE_HEIGHT,boulderImage,"boulder",randomX,randomY);
             BOULDER_COUNT ++;
         }
@@ -78,8 +78,8 @@ public class GameBuilder {
         int LAVA_NUMBER = 25;
         int LAVA_COUNT = 0;
         while(LAVA_COUNT < LAVA_NUMBER){
-            int randomX = random.nextInt(23) + 1;
-            int randomY = random.nextInt(19) + 3;
+            int randomX = random.nextInt(22) + 1;
+            int randomY = random.nextInt(18) + 3;
             place(SQUARE_WIDTH,SQUARE_HEIGHT,lavaImage,"lava",randomX,randomY);
             LAVA_COUNT ++;
         }
@@ -131,8 +131,8 @@ public class GameBuilder {
     private void placeValuables(int SQUARE_WIDTH, int SQUARE_HEIGHT, Image image,String value, Random random, int VALUABLE_NUMBER) {
         int count = 0;
         while (count < VALUABLE_NUMBER){
-            int randomX = random.nextInt(23) + 1;
-            int randomY = random.nextInt(19) + 5;
+            int randomX = random.nextInt(22) + 1;
+            int randomY = random.nextInt(18) + 5;
             if(grid[randomX][randomY] == null){
                 place(SQUARE_WIDTH,SQUARE_HEIGHT,image,value,randomX,randomY);
                 count++;

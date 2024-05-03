@@ -1,6 +1,4 @@
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -46,9 +44,12 @@ public class Game {
     Image drillRight = new Image("/assets/drill/drill_60.png");
     Image drillDown = new Image("/assets/drill/drill_44.png");
     Image drillUp = new Image("/assets/drill/drill_25.png");
+    Image[] imagesForUp = new Image[]{new Image("/assets/drill/drill_23.png"),new Image("/assets/drill/drill_24.png"),
+            new Image("/assets/drill/drill_25.png"),new Image("/assets/drill/drill_26.png"),
+            new Image("/assets/drill/drill_27.png")};
     Timeline timelineForGravity;
     Timeline timelineForFuel;
-    Timeline timelineForFlying;
+    AnimationTimer animationTimer;
     public void game(){
         int SQUARE_LENGTH = 30;
 
@@ -61,23 +62,23 @@ public class Game {
             if(drill.getFuel() > 0){
                 if(keyEvent.getCode() == KeyCode.RIGHT){
                     right(SQUARE_LENGTH,scene,root);
-                    decreaseFuel();
+                    decreaseFuel(100);
                 }else if(keyEvent.getCode() == KeyCode.LEFT){
                     left(SQUARE_LENGTH,scene,root);
-                    decreaseFuel();
+                    decreaseFuel(100);
                 }else if(keyEvent.getCode() == KeyCode.UP){
                     up(SQUARE_LENGTH,scene,root);
-                    decreaseFuel();
+                    // I did not call decreaseFuel function here because decrease amount changes for different up situations
                 }else if(keyEvent.getCode() == KeyCode.DOWN){
                     down(SQUARE_LENGTH,scene,root);
-                    decreaseFuel();
+                    decreaseFuel(100);
                 }
             }
         });
     }
 
-    private void decreaseFuel(){
-        drill.setFuel(drill.getFuel()-100);
+    private void decreaseFuel(int decreaseAmount){
+        drill.setFuel(drill.getFuel()-decreaseAmount);
         textForFuel.setText("fuel:" + drill.getFuel());
         if(drill.getFuel() <= 0){
             gameOverForFuel();
@@ -88,9 +89,9 @@ public class Game {
 
         if(checkUp(drill.getXPosition(),drill.getYPosition(),SQUARE_LENGTH)){
             // change the direction of drill
-            /*if(drill.getCondition() != drillUp){
+            if(drill.getCondition() != drillUp){
                 drill.setCondition(drillUp);
-            }*/
+            }
             ImageView drillImage = new ImageView(drill.getCondition());
             drill.setYPosition(drill.getYPosition() - SQUARE_LENGTH);
 
@@ -132,6 +133,9 @@ public class Game {
         scene.setRoot(root);
         if(timelineForGravity != null){
             timelineForGravity.stop();
+        }
+        if(animationTimer != null){
+            animationTimer.stop();
         }
         gravity(drill.getXPosition(),drill.getYPosition(),SQUARE_LENGTH);
     }
@@ -221,16 +225,44 @@ public class Game {
     }
     private boolean checkUp(int xPosition, int yPosition , int SQUARE_LENGTH){
         if(drill.getYPosition() == 10){
+            decreaseFuel(120);
             return false;
         }
         String value = gridString[xPosition/SQUARE_LENGTH][(yPosition - SQUARE_LENGTH)/SQUARE_LENGTH];
         if(value.equals("empty") || value.equals("sky")){
+            decreaseFuel(100);
             root.getChildren().remove(root.getChildren().size()-1);
             return true;
         }
-        timelineForFlying = new Timeline(new KeyFrame(Duration.millis(400),actionEvent -> {
-            // add an animation when we try to dig up
-        }));
+        decreaseFuel(120);
+        animationTimer = new AnimationTimer() {
+            int currentImageIndex=0;
+            long lastTime = 0;
+
+            @Override
+            public void handle(long now) {
+                // Calculate time difference since the last frame
+                long elapsedTime = now - lastTime;
+
+                // If 100 milliseconds have passed, move to the next image
+                if (elapsedTime >= 200_000_000) {
+                    drill.setCondition(imagesForUp[currentImageIndex]);
+                    root.getChildren().remove(root.getChildren().size()-1);
+                    ImageView drillImage = new ImageView(drill.getCondition());
+                    drillImage.setFitWidth(SQUARE_LENGTH);
+                    drillImage.setFitHeight(SQUARE_LENGTH);
+                    drillImage.setX(drill.getXPosition());
+                    drillImage.setY(drill.getYPosition());
+                    root.getChildren().add(drillImage);
+                    currentImageIndex = (currentImageIndex + 1) % imagesForUp.length;
+                    lastTime = now;
+                }
+            }
+        };
+
+    // Start the animation timer
+        animationTimer.start();
+
         root.getChildren().remove(root.getChildren().size()-1);
         if(drill.getCondition() != drillUp){
             drill.setCondition(drillUp);
@@ -294,6 +326,7 @@ public class Game {
             gameOverForFuel();
         }
     }
+
     private void gravity(int xPosition, int yPosition , int SQUARE_LENGTH) {
         int EMPTY_COUNT = 0;
         for(int y = (yPosition/SQUARE_LENGTH) + 1;y<scene.getHeight()/SQUARE_LENGTH;y++){

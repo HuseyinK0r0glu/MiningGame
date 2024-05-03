@@ -24,7 +24,7 @@ public class Main extends Application{
         Random random = new Random();
         int fuel = 1000 * (random.nextInt(10)) + 10000;
 
-        Drill drill = new Drill(fuel,0,0,660,40);
+        Drill drill = new Drill(fuel,0,0,630,40);
         Group root = new Group();
 
         Map<String,Integer> valuablesMoney = new HashMap<>();
@@ -38,10 +38,10 @@ public class Main extends Application{
             }
         }
 
-        Rectangle skyRectangle = new Rectangle(750,60, Color.SKYBLUE);
+        Rectangle skyRectangle = new Rectangle(720,60, Color.SKYBLUE);
         skyRectangle.setX(0);
         skyRectangle.setY(0);
-        Rectangle groundRectangle = new Rectangle(750,690,Color.ROSYBROWN);
+        Rectangle groundRectangle = new Rectangle(720,650,Color.SADDLEBROWN);
         groundRectangle.setX(0);
         groundRectangle.setY(60);
 
