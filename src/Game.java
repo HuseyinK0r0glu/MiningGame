@@ -138,8 +138,10 @@ public class Game {
                 return false;
             case "lava":
                 return false;
-            default:
+            case "empty":
                 return true;
+            default:
+                return false;
         }
     }
 
@@ -223,7 +225,7 @@ public class Game {
                 move(SQUARE_LENGTH, scene, root, drillImage);
             }
         }else{
-            String value = gridString[(drill.getXPosition() - SQUARE_LENGTH)/SQUARE_LENGTH][(drill.getYPosition()/SQUARE_LENGTH)];
+            String value = gridString[(drill.getXPosition() + SQUARE_LENGTH)/SQUARE_LENGTH][(drill.getYPosition()/SQUARE_LENGTH)];
             if(value.equals("sky") || value.equals("empty")){
                 root.getChildren().remove(root.getChildren().size() - 1);
                 drill.setCondition(drillRight);
