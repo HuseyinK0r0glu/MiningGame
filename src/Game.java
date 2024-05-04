@@ -67,7 +67,9 @@ public class Game {
     Timeline timelineForGravity;
     Timeline timelineForFuel;
     AnimationTimer animationTimer;
+    boolean flying = false;
 
+    Timeline timelineForFlying;
     /**
      * game method to play the game.
      */
@@ -78,6 +80,12 @@ public class Game {
         timelineForFuel = new Timeline(new KeyFrame(Duration.millis(100), event -> decreaseFuel(drill,textForFuel,DECREASE_RATE)));
         timelineForFuel.setCycleCount(Animation.INDEFINITE);
         timelineForFuel.play();
+
+        timelineForFlying = new Timeline(new KeyFrame(Duration.millis(225),event -> {
+            flying = checkForBelowBlock(drill.getXPosition(),drill.getYPosition(),SQUARE_LENGTH);
+        }));
+        timelineForFlying.setCycleCount(Animation.INDEFINITE);
+        timelineForFlying.play();
 
         scene.setOnKeyPressed(keyEvent -> {
             if(drill.getFuel() > 0){
@@ -108,6 +116,30 @@ public class Game {
         textForFuel.setText("fuel:" + drill.getFuel());
         if(drill.getFuel() <= 0){
             gameOverForFuel();
+        }
+    }
+
+    /**
+     * Method for checking if the below of the drill is empty(checks if drill is flying) and returns a boolean
+     * represents drill is flying condition.
+     * @param xPosition     X position of our drill.
+     * @param yPosition     Y position of our drill.
+     * @param SQUARE_LENGTH Height of each grid.
+     * @return              true if drill is flying,false if drill is not flying.
+     */
+    private boolean checkForBelowBlock(int xPosition, int yPosition , int SQUARE_LENGTH){
+        String value = gridString[xPosition/SQUARE_LENGTH][(yPosition + SQUARE_LENGTH)/SQUARE_LENGTH];
+        // checks for every possible element
+        switch (value) {
+            case "boulder":
+                return false;
+            case "earth":
+            case "top":
+                return false;
+            case "lava":
+                return false;
+            default:
+                return true;
         }
     }
 
@@ -153,16 +185,19 @@ public class Game {
      */
     private void down(int SQUARE_LENGTH,Scene scene,Group root) {
 
-        // change the direction of drill
-        if(drill.getCondition() != drillDown){
-            drill.setCondition(drillDown);
-            root.getChildren().remove(root.getChildren().size()-1);
-            move(SQUARE_LENGTH,scene,root,new ImageView(drill.getCondition()));
-        }
-        if(checkDown(drill.getXPosition(),drill.getYPosition(),SQUARE_LENGTH)){
-            ImageView drillImage = new ImageView(drill.getCondition());
-            drill.setYPosition(drill.getYPosition() + SQUARE_LENGTH);
-            move(SQUARE_LENGTH, scene, root, drillImage);
+        // if drill is flying it can't drill downward it has to fall down until it reaches something.
+        if(!flying){
+            // change the direction of drill
+            if(drill.getCondition() != drillDown){
+                drill.setCondition(drillDown);
+                root.getChildren().remove(root.getChildren().size()-1);
+                move(SQUARE_LENGTH,scene,root,new ImageView(drill.getCondition()));
+            }
+            if(checkDown(drill.getXPosition(),drill.getYPosition(),SQUARE_LENGTH)){
+                ImageView drillImage = new ImageView(drill.getCondition());
+                drill.setYPosition(drill.getYPosition() + SQUARE_LENGTH);
+                move(SQUARE_LENGTH, scene, root, drillImage);
+            }
         }
     }
 
@@ -174,16 +209,27 @@ public class Game {
      */
     private void right(int SQUARE_LENGTH,Scene scene,Group root) {
 
-        // change the direction of drill
-        if(drill.getCondition() != drillRight){
-            drill.setCondition(drillRight);
-            root.getChildren().remove(root.getChildren().size()-1);
-            move(SQUARE_LENGTH,scene,root,new ImageView(drill.getCondition()));
-        }
-        if(checkRight(drill.getXPosition(),drill.getYPosition(),SQUARE_LENGTH)){
-            ImageView drillImage = new ImageView(drill.getCondition());
-            drill.setXPosition(drill.getXPosition() + SQUARE_LENGTH);
-            move(SQUARE_LENGTH, scene, root, drillImage);
+        // if right block is not sky or empty drill can not drill rightward while it is flying.
+        if(!flying){
+            // change the direction of drill
+            if(drill.getCondition() != drillRight){
+                drill.setCondition(drillRight);
+                root.getChildren().remove(root.getChildren().size()-1);
+                move(SQUARE_LENGTH,scene,root,new ImageView(drill.getCondition()));
+            }
+            if(checkRight(drill.getXPosition(),drill.getYPosition(),SQUARE_LENGTH)){
+                ImageView drillImage = new ImageView(drill.getCondition());
+                drill.setXPosition(drill.getXPosition() + SQUARE_LENGTH);
+                move(SQUARE_LENGTH, scene, root, drillImage);
+            }
+        }else{
+            String value = gridString[(drill.getXPosition() - SQUARE_LENGTH)/SQUARE_LENGTH][(drill.getYPosition()/SQUARE_LENGTH)];
+            if(value.equals("sky") || value.equals("empty")){
+                root.getChildren().remove(root.getChildren().size() - 1);
+                drill.setCondition(drillRight);
+                drill.setXPosition(drill.getXPosition() + SQUARE_LENGTH);
+                move(SQUARE_LENGTH,scene,root,new ImageView(drill.getCondition()));
+            }
         }
     }
 
@@ -195,17 +241,29 @@ public class Game {
      */
     private void left(int SQUARE_LENGTH,Scene scene,Group root) {
 
-        // change the direction of drill
-        if(drill.getCondition() != drillLeft){
-            drill.setCondition(drillLeft);
-            root.getChildren().remove(root.getChildren().size()-1);
-            move(SQUARE_LENGTH,scene,root,new ImageView(drill.getCondition()));
+        // if left block is not sky or empty drill can not drill leftward while it is flying.
+        if(!flying){
+            // change the direction of drill
+            if(drill.getCondition() != drillLeft){
+                drill.setCondition(drillLeft);
+                root.getChildren().remove(root.getChildren().size()-1);
+                move(SQUARE_LENGTH,scene,root,new ImageView(drill.getCondition()));
+            }
+            if(checkLeft(drill.getXPosition(), drill.getYPosition(), SQUARE_LENGTH)){
+                ImageView drillImage = new ImageView(drill.getCondition());
+                drill.setXPosition(drill.getXPosition() - SQUARE_LENGTH);
+                move(SQUARE_LENGTH, scene, root, drillImage);
+            }
+        }else{
+            String value = gridString[(drill.getXPosition() - SQUARE_LENGTH)/SQUARE_LENGTH][(drill.getYPosition()/SQUARE_LENGTH)];
+            if(value.equals("sky") || value.equals("empty")){
+                root.getChildren().remove(root.getChildren().size() - 1);
+                drill.setCondition(drillLeft);
+                drill.setXPosition(drill.getXPosition() - SQUARE_LENGTH);
+                move(SQUARE_LENGTH,scene,root,new ImageView(drill.getCondition()));
+            }
         }
-        if(checkLeft(drill.getXPosition(), drill.getYPosition(), SQUARE_LENGTH)){
-            ImageView drillImage = new ImageView(drill.getCondition());
-            drill.setXPosition(drill.getXPosition() - SQUARE_LENGTH);
-            move(SQUARE_LENGTH, scene, root, drillImage);
-        }
+
     }
 
     /**
