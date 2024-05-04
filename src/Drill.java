@@ -1,7 +1,5 @@
 import javafx.scene.image.Image;
 
-import java.io.InputStream;
-
 /**
  * Drill class for holding attributes of our drill.
  */

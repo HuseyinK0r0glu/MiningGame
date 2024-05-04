@@ -54,17 +54,16 @@ public class GameBuilder {
         Image earthImage = new Image("/assets/underground/soil_01.png");
         Image topImage = new Image("/assets/underground/top_01.png");
         Image lavaImage = new Image("/assets/underground/lava_02.png");
-        Image diamondImage = new Image("/assets/underground/valuable_diamond.png");
-        Image emeraldImage = new Image("/assets/underground/valuable_emerald.png");
-        Image platinumImage = new Image("/assets/underground/valuable_platinium.png");
         Image amazoniteImage = new Image("/assets/underground/valuable_amazonite.png");
+        Image bronziumImage = new Image("/assets/underground/valuable_bronzium.png");
+        Image diamondImage = new Image("/assets/underground/valuable_diamond.png");
+        Image einsteiniumImage = new Image("/assets/underground/valuable_einsteinium.png");
+        Image emeraldImage = new Image("/assets/underground/valuable_emerald.png");
         Image goldiumImage = new Image("/assets/underground/valuable_goldium.png");
         Image ironiumImage = new Image("/assets/underground/valuable_ironium.png");
-        Image bronziumImage = new Image("/assets/underground/valuable_bronzium.png");
+        Image platinumImage = new Image("/assets/underground/valuable_platinum.png");
         Image rubyImage = new Image("/assets/underground/valuable_ruby.png");
         Image silveriumImage = new Image("/assets/underground/valuable_silverium.png");
-        Image einsteiniumImage = new Image("/assets/underground/valuable_einsteinium.png");
-
 
         // sky
         for(int x=0;x<gridString.length;x++){
@@ -106,25 +105,25 @@ public class GameBuilder {
 
         // valuables
 
-        placeValuables(SQUARE_WIDTH, SQUARE_HEIGHT, diamondImage,"Diamond", 3);
-
-        placeValuables(SQUARE_WIDTH, SQUARE_HEIGHT, emeraldImage, "Emerald", 5);
-
-        placeValuables(SQUARE_WIDTH, SQUARE_HEIGHT, platinumImage, "Platinum", 7);
-
-        placeValuables(SQUARE_WIDTH, SQUARE_HEIGHT, amazoniteImage,"Amazonite", 1);
-
-        placeValuables(SQUARE_WIDTH, SQUARE_HEIGHT, goldiumImage, "Goldium",8);
-
         placeValuables(SQUARE_WIDTH,SQUARE_HEIGHT,ironiumImage,"Ironium",11);
 
         placeValuables(SQUARE_WIDTH,SQUARE_HEIGHT,bronziumImage,"Bronzium",10);
 
-        placeValuables(SQUARE_WIDTH,SQUARE_HEIGHT,rubyImage,"Ruby",4);
-
         placeValuables(SQUARE_WIDTH,SQUARE_HEIGHT,silveriumImage,"Silverium",9);
 
+        placeValuables(SQUARE_WIDTH, SQUARE_HEIGHT, goldiumImage, "Goldium",8);
+
+        placeValuables(SQUARE_WIDTH, SQUARE_HEIGHT, platinumImage, "Platinum", 7);
+
         placeValuables(SQUARE_WIDTH,SQUARE_HEIGHT,einsteiniumImage,"Einsteinium",6);
+
+        placeValuables(SQUARE_WIDTH, SQUARE_HEIGHT, emeraldImage, "Emerald", 5);
+
+        placeValuables(SQUARE_WIDTH,SQUARE_HEIGHT,rubyImage,"Ruby",4);
+
+        placeValuables(SQUARE_WIDTH, SQUARE_HEIGHT, diamondImage,"Diamond", 3);
+
+        placeValuables(SQUARE_WIDTH, SQUARE_HEIGHT, amazoniteImage,"Amazonite", 1);
 
         // earth
         for(int x=0;x<GRID_SIZE;x++) {
