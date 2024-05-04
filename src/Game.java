@@ -153,11 +153,13 @@ public class Game {
      */
     private void down(int SQUARE_LENGTH,Scene scene,Group root) {
 
+        // change the direction of drill
+        if(drill.getCondition() != drillDown){
+            drill.setCondition(drillDown);
+            root.getChildren().remove(root.getChildren().size()-1);
+            move(SQUARE_LENGTH,scene,root,new ImageView(drill.getCondition()));
+        }
         if(checkDown(drill.getXPosition(),drill.getYPosition(),SQUARE_LENGTH)){
-            // change the direction of drill
-            if(drill.getCondition() != drillDown){
-                drill.setCondition(drillDown);
-            }
             ImageView drillImage = new ImageView(drill.getCondition());
             drill.setYPosition(drill.getYPosition() + SQUARE_LENGTH);
             move(SQUARE_LENGTH, scene, root, drillImage);
@@ -172,11 +174,13 @@ public class Game {
      */
     private void right(int SQUARE_LENGTH,Scene scene,Group root) {
 
+        // change the direction of drill
+        if(drill.getCondition() != drillRight){
+            drill.setCondition(drillRight);
+            root.getChildren().remove(root.getChildren().size()-1);
+            move(SQUARE_LENGTH,scene,root,new ImageView(drill.getCondition()));
+        }
         if(checkRight(drill.getXPosition(),drill.getYPosition(),SQUARE_LENGTH)){
-            // change the direction of drill
-            if(drill.getCondition() != drillRight){
-                drill.setCondition(drillRight);
-            }
             ImageView drillImage = new ImageView(drill.getCondition());
             drill.setXPosition(drill.getXPosition() + SQUARE_LENGTH);
             move(SQUARE_LENGTH, scene, root, drillImage);
@@ -191,11 +195,13 @@ public class Game {
      */
     private void left(int SQUARE_LENGTH,Scene scene,Group root) {
 
+        // change the direction of drill
+        if(drill.getCondition() != drillLeft){
+            drill.setCondition(drillLeft);
+            root.getChildren().remove(root.getChildren().size()-1);
+            move(SQUARE_LENGTH,scene,root,new ImageView(drill.getCondition()));
+        }
         if(checkLeft(drill.getXPosition(), drill.getYPosition(), SQUARE_LENGTH)){
-            // change the direction of drill
-            if(drill.getCondition() != drillLeft){
-                drill.setCondition(drillLeft);
-            }
             ImageView drillImage = new ImageView(drill.getCondition());
             drill.setXPosition(drill.getXPosition() - SQUARE_LENGTH);
             move(SQUARE_LENGTH, scene, root, drillImage);
@@ -260,7 +266,6 @@ public class Game {
                 gridString[(xPosition - SQUARE_LENGTH) / SQUARE_LENGTH][(yPosition / SQUARE_LENGTH)] = "empty";
                 return true;
         }
-        root.getChildren().remove(root.getChildren().size()-1);
         return true;
     }
 
