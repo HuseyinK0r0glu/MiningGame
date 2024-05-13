@@ -68,8 +68,8 @@ public class Game {
     Timeline timelineForFuel;
     AnimationTimer animationTimer;
     boolean flying = false;
-
     Timeline timelineForFlying;
+
     /**
      * game method to play the game.
      */
@@ -90,16 +90,16 @@ public class Game {
         scene.setOnKeyPressed(keyEvent -> {
             if(drill.getFuel() > 0){
                 if(keyEvent.getCode() == KeyCode.RIGHT){
-                    right(SQUARE_LENGTH,scene,root);
+                    right(SQUARE_LENGTH);
                     decreaseFuel(100);
                 }else if(keyEvent.getCode() == KeyCode.LEFT){
-                    left(SQUARE_LENGTH,scene,root);
+                    left(SQUARE_LENGTH);
                     decreaseFuel(100);
                 }else if(keyEvent.getCode() == KeyCode.UP){
-                    up(SQUARE_LENGTH,scene,root);
+                    up(SQUARE_LENGTH);
                     // I did not call decreaseFuel function here because decrease amount changes for different up situations
                 }else if(keyEvent.getCode() == KeyCode.DOWN){
-                    down(SQUARE_LENGTH,scene,root);
+                    down(SQUARE_LENGTH);
                     decreaseFuel(100);
                 }
             }
@@ -148,10 +148,8 @@ public class Game {
     /**
      * up method to control the move for upward direction.
      * @param SQUARE_LENGTH Height of each grid.
-     * @param scene         Our game scene.It has all the images for our game.
-     * @param root          Root group of the scene.
      */
-    private void up(int SQUARE_LENGTH,Scene scene,Group root) {
+    private void up(int SQUARE_LENGTH) {
 
         if(checkUp(drill.getXPosition(),drill.getYPosition(),SQUARE_LENGTH)){
             // change the direction of drill
@@ -182,10 +180,8 @@ public class Game {
     /**
      * down method to control the move for downward direction.
      * @param SQUARE_LENGTH Height of each grid.
-     * @param scene         Our game scene.It has all the images for our game.
-     * @param root          Root group of the scene.
      */
-    private void down(int SQUARE_LENGTH,Scene scene,Group root) {
+    private void down(int SQUARE_LENGTH) {
 
         // if drill is flying it can't drill downward it has to fall down until it reaches something.
         if(!flying){
@@ -193,12 +189,12 @@ public class Game {
             if(drill.getCondition() != drillDown){
                 drill.setCondition(drillDown);
                 root.getChildren().remove(root.getChildren().size()-1);
-                move(SQUARE_LENGTH,scene,root,new ImageView(drill.getCondition()));
+                move(SQUARE_LENGTH,new ImageView(drill.getCondition()));
             }
             if(checkDown(drill.getXPosition(),drill.getYPosition(),SQUARE_LENGTH)){
                 ImageView drillImage = new ImageView(drill.getCondition());
                 drill.setYPosition(drill.getYPosition() + SQUARE_LENGTH);
-                move(SQUARE_LENGTH, scene, root, drillImage);
+                move(SQUARE_LENGTH, drillImage);
             }
         }
     }
@@ -206,10 +202,8 @@ public class Game {
     /**
      * right method to control the move for rightward direction.
      * @param SQUARE_LENGTH Height of each grid.
-     * @param scene         Our game scene.It has all the images for our game.
-     * @param root          Root group of the scene.
      */
-    private void right(int SQUARE_LENGTH,Scene scene,Group root) {
+    private void right(int SQUARE_LENGTH) {
 
         // if right block is not sky or empty drill can not drill rightward while it is flying.
         if(!flying){
@@ -217,12 +211,12 @@ public class Game {
             if(drill.getCondition() != drillRight){
                 drill.setCondition(drillRight);
                 root.getChildren().remove(root.getChildren().size()-1);
-                move(SQUARE_LENGTH,scene,root,new ImageView(drill.getCondition()));
+                move(SQUARE_LENGTH,new ImageView(drill.getCondition()));
             }
             if(checkRight(drill.getXPosition(),drill.getYPosition(),SQUARE_LENGTH)){
                 ImageView drillImage = new ImageView(drill.getCondition());
                 drill.setXPosition(drill.getXPosition() + SQUARE_LENGTH);
-                move(SQUARE_LENGTH, scene, root, drillImage);
+                move(SQUARE_LENGTH, drillImage);
             }
         }else{
             String value = gridString[(drill.getXPosition() + SQUARE_LENGTH)/SQUARE_LENGTH][(drill.getYPosition()/SQUARE_LENGTH)];
@@ -230,7 +224,7 @@ public class Game {
                 root.getChildren().remove(root.getChildren().size() - 1);
                 drill.setCondition(drillRight);
                 drill.setXPosition(drill.getXPosition() + SQUARE_LENGTH);
-                move(SQUARE_LENGTH,scene,root,new ImageView(drill.getCondition()));
+                move(SQUARE_LENGTH,new ImageView(drill.getCondition()));
             }
         }
     }
@@ -238,10 +232,8 @@ public class Game {
     /**
      * left method to control the move for leftward direction.
      * @param SQUARE_LENGTH Height of each grid.
-     * @param scene         Our game scene.It has all the images for our game.
-     * @param root          Root group of the scene.
      */
-    private void left(int SQUARE_LENGTH,Scene scene,Group root) {
+    private void left(int SQUARE_LENGTH) {
 
         // if left block is not sky or empty drill can not drill leftward while it is flying.
         if(!flying){
@@ -249,12 +241,12 @@ public class Game {
             if(drill.getCondition() != drillLeft){
                 drill.setCondition(drillLeft);
                 root.getChildren().remove(root.getChildren().size()-1);
-                move(SQUARE_LENGTH,scene,root,new ImageView(drill.getCondition()));
+                move(SQUARE_LENGTH,new ImageView(drill.getCondition()));
             }
             if(checkLeft(drill.getXPosition(), drill.getYPosition(), SQUARE_LENGTH)){
                 ImageView drillImage = new ImageView(drill.getCondition());
                 drill.setXPosition(drill.getXPosition() - SQUARE_LENGTH);
-                move(SQUARE_LENGTH, scene, root, drillImage);
+                move(SQUARE_LENGTH, drillImage);
             }
         }else{
             String value = gridString[(drill.getXPosition() - SQUARE_LENGTH)/SQUARE_LENGTH][(drill.getYPosition()/SQUARE_LENGTH)];
@@ -262,7 +254,7 @@ public class Game {
                 root.getChildren().remove(root.getChildren().size() - 1);
                 drill.setCondition(drillLeft);
                 drill.setXPosition(drill.getXPosition() - SQUARE_LENGTH);
-                move(SQUARE_LENGTH,scene,root,new ImageView(drill.getCondition()));
+                move(SQUARE_LENGTH,new ImageView(drill.getCondition()));
             }
         }
 
@@ -271,11 +263,9 @@ public class Game {
     /**
      * move method that changes certain things for left,right,down
      * @param SQUARE_LENGTH Height of each grid.
-     * @param scene         Our game scene.It has all the images for our game.
-     * @param root          Root group of the scene.
      * @param drillImage    The Image of drill's current condition.
      */
-    private void move(int SQUARE_LENGTH, Scene scene, Group root, ImageView drillImage) {
+    private void move(int SQUARE_LENGTH, ImageView drillImage) {
         drillImage.setFitWidth(SQUARE_LENGTH);
         drillImage.setFitHeight(SQUARE_LENGTH);
         drillImage.setX(drill.getXPosition());
