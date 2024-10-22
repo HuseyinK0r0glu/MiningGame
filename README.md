@@ -1,12 +1,18 @@
-Overview
-Mining Game is a JavaFX-based interactive game where players control a drill to navigate through a mining environment. The objective is to collect valuable stones while managing fuel and avoiding obstacles like lava. The game implements gravity mechanics, making movement realistic and challenging.
+# MiningGame
 
-Features
-Dynamic Movement: Control the drill as it moves in all directions with gravity effects.
-Resource Collection: Collect valuable stones scattered throughout the game area.
-Fuel Management: Keep track of fuel levels; the game ends when fuel runs out.
-Hazard Avoidance: Avoid lava; touching it results in game over.
-Requirements
-Java Development Kit (JDK 8 or later)
-JavaFX SDK
+## Project Overview
+MiningGame is a JavaFX project where players control a mining drill to explore underground, collect valuable resources, manage fuel, and avoid hazards like lava. The game involves gravity mechanics and resource management, providing a dynamic experience.
 
+## Features
+- *Resource Collection*: Collect stones and minerals.
+- *Fuel Management*: Keep track of fuel levels to avoid game over.
+- *Hazards*: Avoid lava to survive longer.
+
+## Technologies Used
+- *JavaFX*: For UI and game interface.
+- *Java*: Core programming language.
+
+## How to Run
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/HuseyinK0r0glu/MiningGame.git 
